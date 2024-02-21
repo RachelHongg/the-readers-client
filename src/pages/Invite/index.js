@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Badge, Card, CardContent, CardActions, Button, Typography, TextField, Box } from "@mui/material";
 import { keyframes, styled, shadows } from "@mui/system";
 import { deepOrange, green } from "@mui/material/colors";
@@ -7,6 +7,8 @@ import { userState } from "recoil/atom";
 import { useRecoilValue } from "recoil";
 import { useToggleDrawer } from "recoil/handler";
 import "./styles.css";
+import SignUpForm from "components/Header/SideDrawer/form/SignUpForm";
+import SignInForm from "components/Header/SideDrawer/form/LogInForm";
 
 // const puff = keyframes`
 // 0% {
@@ -65,11 +67,14 @@ function Invite() {
 	const decodeHost = decodeURIComponent(host);
 	const toggleDrawer = useToggleDrawer();
 	const navigate = useNavigate();
+	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+	const [isSignInOpen, setIsSignInOpen] = useState(false);
 
 	const clickHandler = () => {
 		if (!user) {
 			alert("회원가입이 필요합니다.");
-			toggleDrawer("signup")();
+			// toggleDrawer("signup")();
+			setIsSignUpOpen(true);
 			return;
 		} else {
 			navigate(`/room/${roomId}`);
@@ -81,37 +86,42 @@ function Invite() {
 
 	return (
 		<StyledBody className="profile-body">
-			<Box className="profile-card">
-				<header>
-					{/* <!-- 방 정보로 이동하는 기능? --> */}
-					<Avatar
-						component={Link}
-						to={`/room/${roomId}`}
-						alt="group chat image"
-						src="/thumbnail.png"
-						sx={{ width: 56, height: 56, border: "1px solid #ddd", boxShadow: 3 }}
-						variant="rounded"
-					></Avatar>
+			<Box sx={{ left: "50%", top: "50%" }}>
+				{isSignUpOpen && <SignUpForm style={{ width: "100%", height: "100%" }} />}
+				{isSignInOpen && <SignInForm />}
+			</Box>
+			{!isSignUpOpen && !isSignInOpen ? (
+				<Box className="profile-card">
+					<header>
+						{/* <!-- 방 정보로 이동하는 기능? --> */}
+						<Avatar
+							component={Link}
+							to={`/room/${roomId}`}
+							alt="group chat image"
+							src="/thumbnail.png"
+							sx={{ width: 56, height: 56, border: "1px solid #ddd", boxShadow: 3 }}
+							variant="rounded"
+						></Avatar>
 
-					{/* <!-- 초대한 사람 --> */}
-					<Typography sx={{ mb: 0, fontSize: 20 }} color="text.secondary" gutterBottom>
-						&quot;{decodeHost}&quot;님이 초대함:
-					</Typography>
+						{/* <!-- 초대한 사람 --> */}
+						<Typography sx={{ mb: 0, fontSize: 20 }} color="text.secondary" gutterBottom>
+							&quot;{decodeHost}&quot;님이 초대함:
+						</Typography>
 
-					{/* <!-- 방 이름 --> */}
-					{/* <Typography sx={{ mb: 2 }} variant="h4" component="h2">
+						{/* <!-- 방 이름 --> */}
+						{/* <Typography sx={{ mb: 2 }} variant="h4" component="h2">
 						{roomId}
 					</Typography> */}
 
-					{/* <Typography variant="p" component="h6">
+						{/* <Typography variant="p" component="h6">
 						<Badge sx={{ mx: 1, ml: 2 }} color="secondary" variant="dot"></Badge>
 						{roomUsersNum}명 참여중
 					</Typography> */}
-				</header>
+					</header>
 
-				{/* <!-- bit of a bio; who are you? --> */}
-				<div className="profile-bio">
-					{/* <Typography variant="body2">
+					{/* <!-- bit of a bio; who are you? --> */}
+					<div className="profile-bio">
+						{/* <Typography variant="body2">
 						<TextField
 							sx={{ width: "85%", mt: 3 }}
 							id="outlined-basic"
@@ -120,19 +130,20 @@ function Invite() {
 							variant="outlined"
 						/>
 					</Typography> */}
-					<Button
-						sx={{ width: "85%", mt: 3, fontSize: 20, backgroundColor: "#313440" }}
-						variant="contained"
-						size="medium"
-						onClick={clickHandler}
-					>
-						이동하기
-					</Button>
-					{/* <Link sx={{ mt: 1, display: "block" }} href="#" underline="none">
+						<Button
+							sx={{ width: "85%", mt: 3, fontSize: 20, backgroundColor: "#313440" }}
+							variant="contained"
+							size="medium"
+							onClick={clickHandler}
+						>
+							이동하기
+						</Button>
+						{/* <Link sx={{ mt: 1, display: "block" }} href="#" underline="none">
 						이미 링크가 있으신가요?
 					</Link> */}
-				</div>
-			</Box>
+					</div>
+				</Box>
+			) : null}
 		</StyledBody>
 	);
 }

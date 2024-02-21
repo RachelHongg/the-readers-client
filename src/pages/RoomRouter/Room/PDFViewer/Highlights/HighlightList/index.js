@@ -110,7 +110,7 @@ export default function HighlightList({ highlights, deleteHandler }) {
 
 	const CreateUrl = () => {
 		if (!user) {
-			alert("로그인이 필요합니다.");
+			alert("회원가입1이 필요합니다.");
 			toggleDrawer("signin")();
 			return;
 		}
@@ -118,6 +118,10 @@ export default function HighlightList({ highlights, deleteHandler }) {
 		const newUrl = `${window.location.host}/invite/room/${roomId}/host/${decodeHost}`;
 		setUrl(newUrl);
 	};
+
+	useEffect(() => {
+		CreateUrl();
+	}, []);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -163,7 +167,7 @@ export default function HighlightList({ highlights, deleteHandler }) {
 							cursor: "pointer",
 						}}
 					>
-						<ShareIcon onClick={CreateUrl} sx={{ marginTop: "10px", cursor: "pointer" }} />
+						<ShareIcon sx={{ marginTop: "10px", cursor: "pointer" }} />
 					</Button>
 					<Popover
 						id={id}
